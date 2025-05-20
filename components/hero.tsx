@@ -86,24 +86,22 @@ export default function Hero() {
 
       {/* 3D Background */}
 
-    <div className="absolute inset-0 z-0 left-[500px]">
-        <Canvas camera={{ position: [0, 0, 6], fov: 50 }}>
+    <div className="absolute inset-0 z-0 top-[200px] left-[300px]">
+        <Canvas camera={{ position: [0, 0, 6], fov: 1 }}>
           <ambientLight intensity={0.1} />
           <directionalLight position={[100, 10, 5]} intensity={8} />
-          <HeroModel />
+          <PushButton />
           <Environment preset="city" />
           <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={2} />
         </Canvas>
       </div>
 
-      <div className="absolute inset-0 z-0 top-[300px]" >
+      <div className="absolute inset-0 z-0 top-[300px] " >
         <Canvas camera={{ position: [0, 0, 6], fov: 75 }}>
-      {/* Lights */}
       <ambientLight intensity={1} />
       <directionalLight position={[5, 5, 5]} color={'yellow'} />
       <pointLight position={[0, 5, 5]} intensity={5} />
       
-      {/* Suspense for loading */}
       <Suspense >
         <Text3D font="/fonts/helvetiker_regular.typeface.json" size={1} height={0.1} position={[-10, 1, 1]}>
           Switches
