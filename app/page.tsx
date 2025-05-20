@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect, useLayoutEffect } from "react"
@@ -6,6 +7,7 @@ import About from "@/components/about"
 import Services from "@/components/services"
 import Contact from "@/components/contact"
 import TunnelAnimation from "@/components/tunnel-animation"
+import FlashTransition from "@/components/FlashTransition"
 import { useGSAP } from "@gsap/react"
 import gsap from "gsap/all"
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -17,8 +19,9 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
-  const [tunnelComplete, setTunnelComplete] = useState(true)
-  const [contentVisible, setContentVisible] = useState(true)
+  const [tunnelComplete, setTunnelComplete] = useState(false)
+  const [showFlash, setShowFlash] = useState(false)
+  const [contentVisible, setContentVisible] = useState(false)
 
   // Initial loading
   useEffect(() => {
@@ -33,11 +36,14 @@ export default function Home() {
   const handleTunnelComplete = () => {
     console.log("Tunnel animation complete")
     setTunnelComplete(true)
+    
+    // Trigger the flash effect immediately after tunnel completes
+    setShowFlash(true)
+  }
 
-    // Add a slight delay before showing content
-    setTimeout(() => {
-      setContentVisible(true)
-    }, 500)
+  const handleFlashComplete = () => {
+    // Show content after flash effect completes
+    setContentVisible(true)
   }
 
   useLayoutEffect(() => {
@@ -56,18 +62,21 @@ export default function Home() {
   return (
     <main className="relative min-h-screen">
       {/* Initial loading screen */}
-      {/* {isLoading && (
+      {isLoading && (
         <>
         <Loader />
         </>
-      )} */}
+      )}
 
       {/* Tunnel animation - show after loading and until complete */}
-      {/* {!isLoading && !tunnelComplete && (
+      {!isLoading && !tunnelComplete && (
         <div className="fixed inset-0 z-40">
           <TunnelAnimation onComplete={handleTunnelComplete} />
         </div>
-      )} */}
+      )}
+      
+      {/* Flash transition effect */}
+      <FlashTransition isActive={showFlash} onComplete={handleFlashComplete} />
 
       {/* Content sections - only show after tunnel is complete */}
       <div
@@ -94,7 +103,7 @@ export default function Home() {
       {/* Debug info */}
       {process.env.NODE_ENV === "development" && (
         <div className="fixed bottom-0 left-0 bg-black bg-opacity-70 text-white p-2 text-xs z-50">
-          Loading: {isLoading ? "Yes" : "No"} | Tunnel Complete: {tunnelComplete ? "Yes" : "No"} | Content Visible:{" "}
+          Loading: {isLoading ? "Yes" : "No"} | Tunnel Complete: {tunnelComplete ? "Yes" : "No"} | Flash: {showFlash ? "Yes" : "No"} | Content Visible:{" "}
           {contentVisible ? "Yes" : "No"}
         </div>
       )}
