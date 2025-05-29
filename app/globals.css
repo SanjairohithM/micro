@@ -6,7 +6,14 @@
 
 @import "tw-animate-css";
 
+
+
 @custom-variant dark (&:is(.dark *));
+
+*::selection {
+  color : white;
+  background-color: #22c55e;
+}
 
 :root {
   --foreground-rgb: 255, 255, 255;
@@ -68,6 +75,61 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Parallax Scrolling Styles */
+html, body {
+  overflow-x: hidden;
+  height: 100%;
+}
+
+body {
+  position: relative;
+}
+
+.parallax-container {
+  height: 100%;
+  overflow-y: visible;
+  overflow-x: hidden;
+  perspective: 1px;
+}
+
+.parallax-section {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+  will-change: transform;
+}
+
+/* Hide scrollbar but allow scrolling */
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+body {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Custom cursor styles */
+.cursor-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Disable custom cursor on touch devices */
+@media (pointer: coarse) {
+  .custom-cursor, .cursor-inner, .cursor-particle {
+    display: none !important;
+  }
+}
+
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

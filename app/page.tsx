@@ -12,6 +12,8 @@ import { ScrollSmoother } from "gsap/ScrollSmoother"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Navbar from "@/components/navbar"
 import Loader from "@/components/Loader"
+// import TestmonialComponent from "@/components/TestmonialComponent"
+
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -129,8 +131,11 @@ export default function Home() {
           <Navbar />
           <Hero />
           <About />
-          <Services />
+           <div style={{ position: 'relative', zIndex: 10 }}>
+      <Services />
+    </div>
           <Contact />
+          {/* <TestmonialComponent/> */}
         </div>
       </div>
 

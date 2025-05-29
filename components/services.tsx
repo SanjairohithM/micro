@@ -2,8 +2,13 @@
 
 import { useRef, useEffect, useState } from "react"
 import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useGSAP } from "@gsap/react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
+
+// Register GSAP plugins
+gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 // Enhanced product data with product types for 3D generation
 const products = [
@@ -18,7 +23,7 @@ const products = [
   },
   {
     id: 2,
-    image: "https://static.grainger.com/rp/s/is/image/Grainger/22KT55_AS01",
+    image: "https://img.freepik.com/premium-photo/electrical-engineer-checking-operation-electrical-control-cabinet-maintenance-concept_539854-3143.jpg?w=1380",
     alt: "Wrench",
     name: "Heavy Duty Wrench",
     description: "Professional-grade adjustable wrench for tough jobs",
@@ -27,7 +32,7 @@ const products = [
   },
   {
     id: 3,
-    image: "https://static.grainger.com/rp/s/is/image/Grainger/22KT55_AS01",
+    image: "https://img.freepik.com/premium-photo/abstract-cyberpunk-gaming-wallpaper-background[…]endering-metaverse-virtual-reality-game_42100-4780.jpg?w=1380",
     alt: "Screwdriver",
     name: "Precision Screwdriver",
     description: "Fine-tip screwdriver for detailed electronic work",
@@ -36,7 +41,7 @@ const products = [
   },
   {
     id: 4,
-    image: "https://static.grainger.com/rp/s/is/image/Grainger/22KT55_AS01",
+    image: "https://static.grainger.com/rp/s/is/image/Grainger/39P790_AS01",
     alt: "Hammer",
     name: "Industrial Hammer",
     description: "Balanced hammer with shock-absorbing grip",
@@ -45,7 +50,7 @@ const products = [
   },
   {
     id: 5,
-    image: "https://static.grainger.com/rp/s/is/image/Grainger/22KT55_AS01",
+    image: "https://cdn.pixabay.com/photo/2013/07/13/13/46/button-161502_1280.png",
     alt: "Saw",
     name: "Cordless Saw",
     description: "Battery-powered saw with precision cutting guide",
@@ -54,7 +59,7 @@ const products = [
   },
   {
     id: 6,
-    image: "https://static.grainger.com/rp/s/is/image/Grainger/22KT55_AS01",
+    image: "https://au.element14.com/productimages/large/en_US/62M5339-40.jpg",
     alt: "Measuring Tape",
     name: "Measuring Tape",
     description: "Retractable measuring tape with metric and imperial units",
@@ -70,7 +75,7 @@ const products = [
     type: "goggles",
     color: "#8ecae6",
   },
-    {
+  {
     id: 8,
     image: "https://static.grainger.com/rp/s/is/image/Grainger/22KT55_AS01",
     alt: "Barrel Pilot Lamp",
@@ -84,6 +89,7 @@ const products = [
 export default function HorizontalProductCarousel() {
   const carouselRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
   const [visibleItems, setVisibleItems] = useState(4)
@@ -122,6 +128,47 @@ export default function HorizontalProductCarousel() {
     }
   }, [])
 
+  // Animation setup with useGSAP for better cleanup
+  useGSAP(() => {
+    if (!trackRef.current || !sectionRef.current) return
+
+    const productItems = gsap.utils.toArray(".product-item") as HTMLElement[]
+
+    // Set initial state - all items stacked on the right
+    gsap.set(productItems, {
+      x: (i) => (i < visibleItems ? window.innerWidth : 0),
+      opacity: (i) => (i < visibleItems ? 0 : 1),
+      rotation: (i) => (i < visibleItems ? 10 : 0),
+    })
+
+    // Create ScrollTrigger animations
+    productItems.forEach((item, index) => {
+      if (index >= visibleItems) return // Only animate initially hidden items
+
+      gsap.to(item, {
+        x: 0,
+        opacity: 1,
+        rotation: 0,
+        duration: 0.8,
+        ease: "back.out(1.2)",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          end: "top 50%",
+          scrub: 1,
+          toggleActions: "play none none none",
+          markers: false,
+          invalidateOnRefresh: true
+        },
+        delay: index * 0.1,
+      })
+    })
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+    }
+  }, { dependencies: [visibleItems, itemWidth, itemGap], scope: sectionRef })
+
   // Update carousel position when activeIndex changes
   useEffect(() => {
     if (!trackRef.current) return
@@ -152,7 +199,11 @@ export default function HorizontalProductCarousel() {
   }
 
   return (
-    <section className="py-20 text-white" style={{ background: "linear-gradient(to bottom, #111, #000)" }}>
+    <section
+      ref={sectionRef}
+      className="py-20 text-white relative z-10 services-section"
+      style={{ background: "linear-gradient(to bottom, #111, #000)" }}
+    >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2
@@ -191,7 +242,7 @@ export default function HorizontalProductCarousel() {
                 <Link
                   key={`product-${index}`}
                   href={`/product/${product.id}`}
-                  className="flex-shrink-0 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 relative group"
+                  className="product-item flex-shrink-0 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 relative group"
                   style={{
                     width: `${itemWidth}px`,
                     height: `${itemWidth}px`,
@@ -234,7 +285,7 @@ export default function HorizontalProductCarousel() {
           <button
             onClick={goToPrev}
             disabled={activeIndex === 0}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 p-4 rounded-full z-10 transition-all duration-300"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 p-4 rounded-full z-10 transition-all duration-300 hover:bg-blue-700"
             style={{
               background: "rgba(37, 99, 235, 0.8)",
               boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
@@ -248,7 +299,7 @@ export default function HorizontalProductCarousel() {
           <button
             onClick={goToNext}
             disabled={activeIndex >= products.length - visibleItems}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 p-4 rounded-full z-10 transition-all duration-300"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 p-4 rounded-full z-10 transition-all duration-300 hover:bg-blue-700"
             style={{
               background: "rgba(37, 99, 235, 0.8)",
               boxShadow: "0 4px 12px rgba(0,0,0,0.3)",

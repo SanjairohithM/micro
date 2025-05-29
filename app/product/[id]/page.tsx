@@ -1,15 +1,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useParams } from "next/navigation"
 import { ArrowLeft, ShoppingCart } from "lucide-react"
 import { products } from "@/components/services"
 import ProductViewer3D from "@/components/products"
 import { Button } from "@/components/ui/button"
 import gsap from "gsap"
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+export default function ProductPage() {
   const router = useRouter()
+  const params = useParams() as { id: string }
   const [product, setProduct] = useState<(typeof products)[0] | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -30,22 +31,27 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   // Animate content when loaded
   useEffect(() => {
     if (!isLoading && product) {
-      // Animate product details
-      gsap.from(".product-details", {
-        opacity: 0,
-        x: 50,
-        duration: 0.8,
-        ease: "power2.out",
-        stagger: 0.1,
-      })
+      const ctx = gsap.context(() => {
+        // Animate product details
+        gsap.from(".product-details", {
+          opacity: 0,
+          x: 50,
+          duration: 0.8,
+          ease: "power2.out",
+          stagger: 0.1,
+        })
 
-      // Animate 3D container
-      gsap.from(".product-3d-container", {
-        opacity: 0,
-        scale: 0.9,
-        duration: 1,
-        ease: "power2.out",
+        // Animate 3D container
+        gsap.from(".product-3d-container", {
+          opacity: 0,
+          scale: 0.9,
+          duration: 1,
+          ease: "power2.out",
+        })
       })
+      
+      // Cleanup animations when component unmounts
+      return () => ctx.revert()
     }
   }, [isLoading, product])
 
