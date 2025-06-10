@@ -12,7 +12,7 @@ import { ScrollSmoother } from "gsap/ScrollSmoother"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Navbar from "@/components/navbar"
 import Loader from "@/components/Loader"
-// import TestmonialComponent from "@/components/TestmonialComponent"
+import TestmonialComponent from "@/components/TestmonialComponent"
 
 
 // Register GSAP plugins
@@ -23,10 +23,10 @@ if (typeof window !== 'undefined') {
 export default function Home() {
   // State management - keep state minimal to reduce re-renders
   const [appState, setAppState] = useState({
-    isLoading: true,
-    tunnelComplete: false,
-    showFlash: false,
-    contentVisible: false
+    isLoading: false,
+    tunnelComplete: true,
+    showFlash: true,
+    contentVisible: true
   })
   
   // Refs for DOM elements and animations
@@ -135,7 +135,7 @@ export default function Home() {
       <Services />
     </div>
           <Contact />
-          {/* <TestmonialComponent/> */}
+          <TestmonialComponent/>
         </div>
       </div>
 

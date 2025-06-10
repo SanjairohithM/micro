@@ -262,12 +262,12 @@ export default function Hero() {
           <directionalLight position={[100, 10, 5]} intensity={8} />
           <PushButton position={[0, 0, 0]} scale={[1.5, 1.5, 1.5]} />
           <Environment preset="sunset" />
-          <OrbitControls
+          {/* <OrbitControls
             enableZoom={false}
             enablePan={false}
             autoRotate
             autoRotateSpeed={2}
-          />
+          /> */}
         </Canvas>
       </div>
 
