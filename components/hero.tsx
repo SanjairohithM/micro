@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextPlugin } from "gsap/TextPlugin";
 import PushButton from "./models/PushButton";
 import ImageHoverButton from "./ImageHoverButton";
+import Earth from "./models/Earth";
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -274,23 +275,26 @@ export default function Hero() {
   }, []);
 
   return (
-    <section
-      ref={heroRef}
-      className="relative h-screen w-full overflow-hidden flex items-center px-12"
-    >
-      {/* Background Image with Dark Overlay and Parallax */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <div
-          className="hero-bg absolute inset-0 w-full h-[120%] will-change-transform"
-          style={{
-            backgroundImage: "url('/image/halfworld.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center center",
-            backgroundRepeat: "no-repeat",
-            transform: "translate3d(0, 0, 0)" // Enable hardware acceleration
-          }}
-        />
-        <div className="absolute inset-0 bg-black/50 z-10"></div>
+          <section
+        ref={heroRef}
+        className="relative h-screen w-full overflow-hidden flex items-center px-12 bg-black"
+      >
+      {/* Earth Model Background */}
+      <div className="absolute inset-0 z-0">
+        <Canvas 
+          camera={{ position: [0, 0, 8], fov: 60 }}
+          style={{ width: '100%', height: '100%' }}
+          gl={{ antialias: true, alpha: true }}
+        >
+          <color attach="background" args={['#000011']} />
+          <fog attach="fog" args={['#000011', 8, 20]} />
+          <ambientLight intensity={0.3} />
+          <directionalLight position={[10, 10, 8]} intensity={2} color="#ffffff" />
+          <pointLight position={[0, 0, 12]} intensity={1} color="#4a90e2" />
+          <Earth position={[0, 0, 0]} scale={[3, 3, 3]} />
+          <Environment preset="dawn" />
+        </Canvas>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 z-10"></div>
       </div>
 
 
