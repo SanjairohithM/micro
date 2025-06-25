@@ -4,7 +4,7 @@ import { useGLTF, useAnimations } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { Group } from 'three';
 
-type PushButtonProps = JSX.IntrinsicElements['group'];
+type PushButtonProps = React.ComponentProps<'group'>;
 
 export default function PushButton(props: PushButtonProps) {
   const groupRef = useRef<Group>(null);
@@ -16,11 +16,12 @@ export default function PushButton(props: PushButtonProps) {
       // Gentle rotation
       groupRef.current.rotation.y += delta * 0.15;
       
-      // Fixed tilt
-      groupRef.current.rotation.x = 0.2;
+      // Rotate to show top view facing the screen
+      groupRef.current.rotation.x = -Math.PI / 2;
       
-      // Subtle pulsing zoom effect
-      const pulse = 1 + Math.sin(state.clock.elapsedTime * 2) * 0.05;
+      // Larger base scale with subtle pulsing zoom effect
+      const baseScale = 1.5; // Increase base size
+      const pulse = baseScale + Math.sin(state.clock.elapsedTime * 2) * 0.08;
       groupRef.current.scale.set(pulse, pulse, pulse);
     }
   });

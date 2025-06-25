@@ -89,31 +89,27 @@ export default function Hero() {
     if (headingRef.current) {
       const headingText = headingRef.current.textContent || '';
       
-      // Split text into individual characters for more control
+      // Split text into individual characters for better control
       headingRef.current.innerHTML = headingText
         .split('')
         .map((char, index) => 
           char === ' ' ? '<span class="char-space">&nbsp;</span>' : 
-          `<span class="char-3d" data-char="${char}" style="display: inline-block; transform-style: preserve-3d;">${char}</span>`
+          `<span class="char-3d" style="display: inline-block; transform-style: preserve-3d;">${char}</span>`
         )
         .join('');
 
       const charElements = headingRef.current.querySelectorAll('.char-3d') as NodeListOf<HTMLElement>;
       
-      // Set initial 3D positions - scattered in 3D space
+      // Set initial state for characters - simple and reliable
       gsap.set(charElements, {
         opacity: 0,
-        scale: 0,
-        x: () => gsap.utils.random(-200, 200),
-        y: () => gsap.utils.random(-100, 100),
-        z: () => gsap.utils.random(-500, 500),
-        rotationX: () => gsap.utils.random(-180, 180),
-        rotationY: () => gsap.utils.random(-180, 180),
-        rotationZ: () => gsap.utils.random(-180, 180),
-        transformOrigin: "center center",
+        y: 100,
+        rotationX: -90,
+        scale: 0.3,
+        transformOrigin: "center bottom",
       });
 
-      // Create advanced 3D timeline
+      // Create character animation timeline
       const headingTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: heroRef.current,
@@ -122,44 +118,35 @@ export default function Hero() {
         },
       });
 
-      // Stage 1: Letters fly in from 3D space with rotation
-      headingTimeline.to(charElements, {
-        opacity: 1,
-        scale: 1,
-        x: 0,
-        y: 0,
-        z: 0,
-        rotationX: 0,
-        rotationY: 0,
-        rotationZ: 0,
-        duration: 2,
-        ease: "power3.out",
-        stagger: {
-          amount: 1.5,
-          from: "random",
-          grid: "auto",
-        },
+      // Animate characters one by one - slower timing
+      charElements.forEach((char, index) => {
+        headingTimeline.to(char, {
+          opacity: 1,
+          y: 0,
+          rotationX: 0,
+          scale: 1,
+          duration: 1.2, // Slower duration
+          ease: "back.out(1.7)",
+        }, index * 0.12); // Much slower stagger
       });
 
-      // Stage 2: Add depth layers effect
+      // Add text shadow for depth - slower
       headingTimeline.to(charElements, {
         textShadow: "2px 2px 0px rgba(255,255,255,0.1), 4px 4px 0px rgba(255,255,255,0.05), 6px 6px 20px rgba(0,0,0,0.3)",
-        duration: 0.8,
-        ease: "power2.out",
-        stagger: 0.02,
-      }, "-=0.5");
+        duration: 1.0, // Slower shadow application
+        stagger: 0.05, // Slower stagger for shadows
+      }, "-=1.0");
 
-      // Stage 3: Subtle 3D hover effect on individual letters
+      // Individual character hover effects
       charElements.forEach((char) => {
         char.addEventListener('mouseenter', () => {
           gsap.to(char, {
             scale: 1.2,
             rotationY: 15,
-            rotationX: -10,
-            z: 50,
+            y: -10,
             color: "#60a5fa",
             textShadow: "0 0 20px rgba(96, 165, 250, 0.6), 2px 2px 0px rgba(255,255,255,0.2)",
-            duration: 0.4,
+            duration: 0.5, // Slower hover animation
             ease: "back.out(1.7)",
           });
         });
@@ -168,37 +155,23 @@ export default function Hero() {
           gsap.to(char, {
             scale: 1,
             rotationY: 0,
-            rotationX: 0,
-            z: 0,
+            y: 0,
             color: "#ffffff",
             textShadow: "2px 2px 0px rgba(255,255,255,0.1), 4px 4px 0px rgba(255,255,255,0.05), 6px 6px 20px rgba(0,0,0,0.3)",
-            duration: 0.4,
+            duration: 0.5, // Slower hover out animation
             ease: "power2.out",
           });
         });
       });
 
-      // Stage 4: Continuous 3D breathing animation
+      // Very slow continuous breathing animation
       gsap.to(headingRef.current, {
-        rotationX: 2,
-        rotationY: 1,
-        duration: 4,
+        rotationX: 1,
+        duration: 6, // Much slower breathing (was 4, now 6)
         ease: "power1.inOut",
         yoyo: true,
         repeat: -1,
-        delay: 3,
-      });
-
-      // Stage 5: Subtle parallax effect on individual characters
-      charElements.forEach((char, index) => {
-        gsap.to(char, {
-          y: `+=${Math.sin(index * 0.5) * 3}`,
-          duration: 3 + (index * 0.1),
-          ease: "power1.inOut",
-          yoyo: true,
-          repeat: -1,
-          delay: 3 + (index * 0.05),
-        });
+        delay: 4, // Longer delay before breathing starts
       });
     }
 
@@ -327,8 +300,8 @@ export default function Hero() {
         <Canvas camera={{ position: [0, 0, 6], fov: 2 }}>
           <ambientLight intensity={0.1} />
           <directionalLight position={[100, 10, 5]} intensity={8} />
-          <PushButton position={[0, 0, 0]} scale={[1.5, 1.5, 1.5]} />
-          <Environment preset="sunset" />
+          <PushButton position={[0, 0, 0]} scale={[3.5, 3.5, 3.5]} />
+          <Environment preset="city" />
           {/* <OrbitControls
             enableZoom={false}
             enablePan={false}
@@ -339,7 +312,7 @@ export default function Hero() {
       </div>
 
       {/* Right Side - Text */}
-      <div className="w-1/2 pl-12 pt-50 relative z-10">
+      <div className="w-1/2 pl-12  relative z-10">
         <h1 
           ref={headingRef}
           className="hero-heading text-5xl font-bold text-white mb-6 perspective-1000 font-montserrat"
@@ -350,6 +323,7 @@ export default function Hero() {
         >
           Premium Industrial Switches & Components
         </h1>
+        <br />
 
         <p 
           ref={descriptionRef}

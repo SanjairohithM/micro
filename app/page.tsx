@@ -140,14 +140,14 @@ export default function Home() {
       </div>
 
       {/* Debug info */}
-      {process.env.NODE_ENV === "development" && (
+      {/* {process.env.NODE_ENV === "development" && (
         <div className="fixed bottom-0 left-0 bg-black bg-opacity-70 text-white p-2 text-xs z-50">
           Loading: {isLoading ? "Yes" : "No"} | 
           Tunnel Complete: {tunnelComplete ? "Yes" : "No"} | 
           Flash: {showFlash ? "Yes" : "No"} | 
           Content Visible: {contentVisible ? "Yes" : "No"}
         </div>
-      )}
+      )} */}
     </main>
   )
 }
