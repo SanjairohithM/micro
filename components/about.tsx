@@ -365,7 +365,7 @@ export default function About() {
             <section 
                 ref={sectionRef} 
                 id="about" 
-                className="relative py-28 md:py-36 bg-gray-900 text-white overflow-hidden"
+                className="relative py-28 md:py-36 bg-black text-white overflow-hidden"
             >
                 {/* Advanced Animated Background */}
                 <div className="absolute inset-0 overflow-hidden opacity-20">

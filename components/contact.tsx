@@ -51,7 +51,7 @@ export default function Contact() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="contact" className="py-20 md:py-32 bg-gray-900 text-white">
+    <section ref={sectionRef} id="contact" className="py-20 md:py-32 bg-black text-white">
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold mb-6">Get In Touch</h2>
