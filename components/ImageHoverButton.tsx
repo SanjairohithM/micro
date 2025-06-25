@@ -31,10 +31,10 @@ const ImageHoverButton = () => {
 
     // Create positions for each image in the top area
     const positions = [
-      { x: -60, y: -100 },  // top left
-      { x: 60, y: -100 },   // top right
-      { x: -30, y: -150 },  // upper left
-      { x: 30, y: -150 }    // upper right
+      { x: -80, y: -120 },  // top left
+      { x: 80, y: -120 },   // top right
+      { x: -40, y: -180 },  // upper left
+      { x: 40, y: -180 }    // upper right
     ];
 
     // Create animation where images appear in different positions above the button
@@ -73,7 +73,7 @@ const ImageHoverButton = () => {
   };
 
   return (
-    <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+    <div className="relative inline-block">
       {/* Map through the imagePaths array */}
       {imagePaths.map((path, index) => (
         <img
@@ -83,12 +83,12 @@ const ImageHoverButton = () => {
           }}
           src={path}
           alt={`Product ${index + 1}`}
-          className="absolute w-16 h-16 object-contain pointer-events-none filter drop-shadow-lg"
+          className="absolute w-20 h-20 object-contain pointer-events-none filter drop-shadow-lg"
           style={{ 
             transformOrigin: "center center",
             willChange: "transform, opacity",
             left: "50%",
-            marginLeft: "-32px" // Half of width to center
+            marginLeft: "-40px" // Half of width to center (20/2 = 10, but we want -40 for 20px images)
           }}
         />
       ))}
@@ -98,7 +98,7 @@ const ImageHoverButton = () => {
         ref={buttonRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 relative z-10 hover:shadow-xl"
+        className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-4 px-8 rounded-full shadow-lg transition-all duration-300 relative z-10 hover:shadow-xl text-lg font-montserrat"
       >
         View Products
       </button>

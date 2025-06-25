@@ -404,10 +404,11 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* Replace button with ImageHoverButton */}
-        <div className="mt-8">
-          <ImageHoverButton />
-        </div>
+      </div>
+
+      {/* ImageHoverButton - Centered at bottom of hero section */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+        <ImageHoverButton />
       </div>
     </section>
   );
