@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter, useParams } from "next/navigation"
-import { ArrowLeft, ShoppingCart } from "lucide-react"
+import { ArrowLeft, Download, ShoppingCart } from "lucide-react"
 import { products } from "@/components/services"
 import ProductViewer3D from "@/components/products"
 import { Button } from "@/components/ui/button"
@@ -88,12 +88,12 @@ export default function ProductPage() {
             Back to Products
           </Button>
 
-          <h1 className="text-xl font-bold hidden md:block">{product.name}</h1>
+          <h1 className="text-xl font-bold text-center flex-1">{product.name}</h1>
 
-          <Button className="bg-blue-600 hover:bg-blue-700">
-            <ShoppingCart className="mr-2 h-4 w-4" />
-            Add to Cart
-          </Button>
+            {/* <Button className="bg-blue-600 hover:bg-blue-700">
+              <ShoppingCart className="mr-2 h-4 w-4" />
+              Add to Cart
+            </Button> */}
         </div>
       </header>
 
@@ -148,12 +148,12 @@ export default function ProductPage() {
             <div className="product-details pt-6 mt-6 border-t border-gray-800">
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700 flex-1">
-                  <ShoppingCart className="mr-2 h-5 w-5" />
-                  Add to Cart
+                  <Download className="mr-2 h-5 w-5" />
+                  Download Brochure
                 </Button>
-                <Button size="lg" variant="outline" className="flex-1">
+                {/* <Button size="lg" variant="outline" className="flex-1">
                   Buy Now
-                </Button>
+                </Button> */}
               </div>
             </div>
           </div>

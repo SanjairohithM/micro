@@ -403,9 +403,9 @@ export default function ProductViewer3D({
   return (
     <div className="w-full h-full relative">
       {/* Instruction overlay */}
-      <div className="absolute top-4 left-4 z-10 bg-black bg-opacity-50 px-3 py-2 rounded-lg text-sm text-white">
+      {/* <div className="absolute top-4 left-4 z-10 bg-black bg-opacity-50 px-3 py-2 rounded-lg text-sm text-white">
         Click on the button to see animation
-      </div>
+      </div> */}
 
       <Canvas shadows>
         <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />

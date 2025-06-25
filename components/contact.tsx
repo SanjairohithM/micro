@@ -54,8 +54,8 @@ export default function Contact() {
     <section ref={sectionRef} id="contact" className="py-20 md:py-32 bg-black text-white">
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Get In Touch</h2>
-          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+          <h2 className="text-3xl md:text-5xl font-bold font-montserrat mb-6">GET IN TOUCH</h2>
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto font-montserrat">
             Have a project in mind? Contact us today and let's discuss how we can help bring your ideas to life.
           </p>
         </div>
