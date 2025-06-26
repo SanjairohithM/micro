@@ -8,16 +8,8 @@ type EarthProps = React.ComponentProps<'group'>;
 export default function Earth(props: EarthProps) {
   const groupRef = useRef<Group>(null);
   
-  // Add error handling for GLTF loading
-  let gltf;
-  try {
-    gltf = useGLTF('/models/earth.glb');
-    console.log('Earth GLTF loaded successfully:', gltf);
-  } catch (error) {
-    console.error('Error loading Earth GLTF:', error);
-    return null;
-  }
-  
+  // Always call useGLTF - don't wrap in try-catch to avoid hooks ordering issues
+  const gltf = useGLTF('/models/earth.glb');
   const { actions, names } = useAnimations(gltf.animations, gltf.scene);
 
   useFrame((state, delta) => {
@@ -44,6 +36,13 @@ export default function Earth(props: EarthProps) {
     }
   }, [actions, names]);
 
+  // Handle potential loading errors at render time, not during hook calls
+  if (!gltf || !gltf.scene) {
+    console.error('Error loading Earth GLTF: scene not available');
+    return null;
+  }
+
+  console.log('Earth GLTF loaded successfully:', gltf);
   return <primitive object={gltf.scene} ref={groupRef} {...props} />;
 }
 

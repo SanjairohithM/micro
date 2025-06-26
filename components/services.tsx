@@ -201,7 +201,7 @@ export default function HorizontalProductCarousel() {
   return (
     <section
       ref={sectionRef}
-      className="py-20 text-white relative z-10 services-section"
+      className="py-20 text-white relative z-10 services-section bg-black"
       style={{ background: "linear-gradient(to bottom, #111, #000)" }}
     >
       <div className="container mx-auto px-4">
