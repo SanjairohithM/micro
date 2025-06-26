@@ -292,7 +292,7 @@ export default function Hero() {
           <directionalLight position={[10, 10, 8]} intensity={2} color="#ffffff" />
           <pointLight position={[0, 0, 12]} intensity={1} color="#4a90e2" />
           <Earth position={[0, 0, 0]} scale={[3, 3, 3]} />
-          <Environment preset="dawn" />
+          <Environment preset="night" />
         </Canvas>
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 z-10"></div>
       </div>
