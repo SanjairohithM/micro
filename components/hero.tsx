@@ -19,9 +19,10 @@ export default function Hero() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const logoRef = useRef<HTMLImageElement>(null);
+  const pushButtonRef = useRef<HTMLDivElement>(null);
 
   // About section refs
-  const aboutSectionRef = useRef<HTMLElement>(null);
+  const aboutSectionRef = useRef<HTMLDivElement>(null);
   const aboutContainerRef = useRef<HTMLDivElement>(null);
   const aboutTextRef = useRef<HTMLDivElement>(null);
   const aboutImageRef = useRef<HTMLDivElement>(null);
@@ -276,6 +277,25 @@ export default function Hero() {
           start: "top bottom",
           end: "bottom top",
           scrub: 1,
+          invalidateOnRefresh: true
+        }
+      });
+    }
+
+    // Push Button scroll animation - move to right section of about area
+    if (pushButtonRef.current) {
+      gsap.to(pushButtonRef.current, {
+        x: "60vw", // Move to right side (about section right area)
+        y: "100vh", // Move down to about section level
+        // Don't scale - let it keep original size from Canvas
+        rotation: 0, // Keep original rotation
+        duration: 1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: aboutSectionRef.current,
+          start: "top bottom", // Start when about section enters
+          end: "center center", // End when about section is centered
+          scrub: 1, // Smooth scrubbing animation
           invalidateOnRefresh: true
         }
       });
@@ -634,16 +654,16 @@ export default function Hero() {
         }
       `}</style>
 
-      {/* Hero Section */}
+            {/* Combined Hero and About Section */}
       <section
         ref={heroRef}
-        className="relative h-screen w-full overflow-hidden flex items-center px-12 bg-black"
+        className="relative min-h-[200vh] w-full overflow-hidden bg-black"
       >
-        {/* Earth Model Background */}
+        {/* Earth Model Background - Extended */}
         <div className="absolute inset-0 z-0">
           <Canvas 
             camera={{ position: [0, 0, 8], fov: 60 }}
-            style={{ width: '100%', height: '100%' }}
+            style={{ width: '100%', height: '200vh' }}
             gl={{ antialias: true, alpha: true }}
           >
             <color attach="background" args={['#000011']} />
@@ -657,173 +677,176 @@ export default function Hero() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 z-10"></div>
         </div>
 
-        {/* Left Side - 3D Model */}
-        <div className="w-1/2 h-full relative z-10 pt-20">
-          <Canvas camera={{ position: [0, 0, 6], fov: 2 }}>
-            <ambientLight intensity={0.1} />
-            <directionalLight position={[100, 10, 5]} intensity={8} />
-            <PushButton position={[0, 0, 0]} scale={[3.5, 3.5, 3.5]} />
-            <Environment preset="city" />
-          </Canvas>
-        </div>
+        {/* Hero Content Area */}
+        <div className="relative h-screen w-full flex items-center px-12">
+          {/* Left Side - 3D Model */}
+          <div ref={pushButtonRef} className="w-1/2 h-full relative z-50 pt-20">
+            <Canvas camera={{ position: [0, 0, 6], fov: 2 }}>
+              <ambientLight intensity={0.1} />
+              <directionalLight position={[100, 10, 5]} intensity={8} />
+              <PushButton position={[0, 0, 0]} scale={[3.5, 3.5, 3.5]} />
+              <Environment preset="city" />
+            </Canvas>
+          </div>
 
-        {/* Right Side - Text */}
-        <div className="w-1/2 pl-12  relative z-10">
-          <h1 
-            ref={headingRef}
-            className="hero-heading text-5xl font-bold text-white mb-6 perspective-1000 font-montserrat"
-            style={{ 
-              perspective: '1000px',
-              transformStyle: 'preserve-3d'
-            }}
-          >
-            Premium Industrial Switches & Components
-          </h1>
-          <br />
-
-          <p 
-            ref={descriptionRef}
-            className="hero-description text-xl text-gray-300 mb-10 max-w-lg leading-relaxed cursor-pointer font-montserrat"
-          >
-            Reliable. Certified. Engineered for Excellence.
-            From push buttons to custom automation solutions – ISO 9001:2015 certified manufacturing trusted across power, mechanical, and traffic industries
-          </p>
-
-          {/* Animated Text with Ball */}
-          <div
-            ref={textWrapperRef}
-            className="relative inline-block text-6xl font-bold tracking-wide text-white mb-12"
-            style={{ perspective: '1000px' }}
-          >
-            {/* Ball that replaces the letter */}
-            <div
-              ref={ballRef}
-              className="absolute w-10 h-10 z-10 pointer-events-none flex items-center justify-center"
-              style={{
-                transform: "translate(0, 0)",
-                willChange: "transform",
-                filter: "drop-shadow(0 0 10px rgba(255,255,255,0.6)) drop-shadow(0 0 20px rgba(78, 205, 196, 0.4))"
+          {/* Right Side - Text */}
+          <div className="w-1/2 pl-12 relative z-10">
+            <h1 
+              ref={headingRef}
+              className="hero-heading text-5xl font-bold text-white mb-6 perspective-1000 font-montserrat"
+              style={{ 
+                perspective: '1000px',
+                transformStyle: 'preserve-3d'
               }}
             >
-              <img 
-                src="https://cdn.pixabay.com/photo/2013/07/13/13/46/button-161502_1280.png"
-                alt="Push Button"
-                className="w-full h-full object-contain "
-                style={{
-                  filter: "brightness(1.2) contrast(1.1)"
-                }}
-              />
-            </div>
+              Premium Industrial Switches & Components
+            </h1>
+            <br />
 
-            {/* Text Letters */}
-            {letters.map((letter, index) => (
-              <span
-                key={index}
-                ref={(el) => { 
-                  letterRefs.current[index] = el;
-                }}              
-                className={`inline-block mx-0.5 transition-all duration-300 font-montserrat ${
-                  index === activeIndex ? "opacity-0" : "opacity-100"
-                }`}
+            <p 
+              ref={descriptionRef}
+              className="hero-description text-xl text-gray-300 mb-10 max-w-lg leading-relaxed cursor-pointer font-montserrat"
+            >
+              Reliable. Certified. Engineered for Excellence.
+              From push buttons to custom automation solutions – ISO 9001:2015 certified manufacturing trusted across power, mechanical, and traffic industries
+            </p>
+
+            {/* Animated Text with Ball */}
+            <div
+              ref={textWrapperRef}
+              className="relative inline-block text-6xl font-bold tracking-wide text-white mb-12"
+              style={{ perspective: '1000px' }}
+            >
+              {/* Ball that replaces the letter */}
+              <div
+                ref={ballRef}
+                className="absolute w-10 h-10 z-10 pointer-events-none flex items-center justify-center"
                 style={{
-                  textShadow: "0 0 10px rgba(255,255,255,0.3)"
+                  transform: "translate(0, 0)",
+                  willChange: "transform",
+                  filter: "drop-shadow(0 0 10px rgba(255,255,255,0.6)) drop-shadow(0 0 20px rgba(78, 205, 196, 0.4))"
                 }}
               >
-                {letter === " " ? "\u00A0" : letter}
-              </span>
-            ))}
+                <img 
+                  src="https://cdn.pixabay.com/photo/2013/07/13/13/46/button-161502_1280.png"
+                  alt="Push Button"
+                  className="w-full h-full object-contain "
+                  style={{
+                    filter: "brightness(1.2) contrast(1.1)"
+                  }}
+                />
+              </div>
+
+              {/* Text Letters */}
+              {letters.map((letter, index) => (
+                <span
+                  key={index}
+                  ref={(el) => { 
+                    letterRefs.current[index] = el;
+                  }}              
+                  className={`inline-block mx-0.5 transition-all duration-300 font-montserrat ${
+                    index === activeIndex ? "opacity-0" : "opacity-100"
+                  }`}
+                  style={{
+                    textShadow: "0 0 10px rgba(255,255,255,0.3)"
+                  }}
+                >
+                  {letter === " " ? "\u00A0" : letter}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* ImageHoverButton - Centered at bottom of hero section */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+            <ImageHoverButton />
           </div>
         </div>
 
-        {/* ImageHoverButton - Centered at bottom of hero section */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-          <ImageHoverButton />
-        </div>
-      </section>
+        {/* About Content Area */}
+        <div 
+          ref={aboutSectionRef} 
+          id="about" 
+          className="fade-section relative py-28 md:py-36 text-white"
+        >
+          {/* Background matching hero section */}
+          <div className="absolute inset-0 z-0">
+            <div className="neural-bg absolute inset-0"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20"></div>
+          </div>
 
-      {/* About Section */}
-      <section 
-        ref={aboutSectionRef} 
-        id="about" 
-        className="fade-section relative py-28 md:py-36 bg-black text-white overflow-hidden"
-      >
-        {/* Background matching hero section */}
-        <div className="absolute inset-0 z-0">
-          <div className="neural-bg absolute inset-0"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20"></div>
-        </div>
+          {/* Animated particles */}
+          <div ref={aboutParticlesRef} className="absolute inset-0 pointer-events-none opacity-30">
+            {[...Array(12)].map((_, i) => (
+              <div 
+                key={i} 
+                className="particle absolute"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`
+                }}
+              />
+            ))}
+          </div>
+          
+          <div ref={aboutContainerRef} className="container mx-auto px-4 md:px-12 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+              <div ref={aboutTextRef} className="space-y-8">
+                {/* GSAP Animated Heading */}
+                <h2 
+                  ref={aboutHeadingRef}
+                  className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-300 leading-tight font-montserrat"
+                  style={{ perspective: '1000px' }}
+                >
+                  About Micro Products
+                </h2>
+                
+                {/* GSAP Typewriter Effect */}
+                <p 
+                  ref={aboutParagraph1Ref}
+                  className="text-lg md:text-xl leading-relaxed text-gray-200 max-w-full break-words font-montserrat"
+                >
+                  An emergency push button is a critical safety device designed for immediate response in hazardous situations.
+                </p>
+                
+                {/* GSAP Wave Effect */}
+                <p 
+                  ref={aboutParagraph2Ref}
+                  className="text-lg md:text-xl leading-relaxed text-gray-300 max-w-full break-words font-montserrat"
+                >
+                  Common in industrial plants, elevators, and public facilities, it enhances workplace safety by providing a quick shutdown mechanism during emergencies. Some models include key reset or break-glass options for authorized use. Compliant with safety standards (ISO 13850, IEC 60947), emergency push buttons are vital for accident prevention and safeguarding lives.
+                </p>
+                
+                <div className="pt-2">
+                  {/* GSAP Animated Button */}
+                  <button 
+                    ref={aboutButtonRef}
+                    className="btn-morph bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold py-3 px-8 rounded-full hover:shadow-lg hover:shadow-blue-500/30 font-montserrat"
+                  >
+                    <span className="relative z-10">Learn More</span>
+                  </button>
+                </div>
+              </div>
 
-        {/* Animated particles */}
-        <div ref={aboutParticlesRef} className="absolute inset-0 pointer-events-none opacity-30">
-          {[...Array(12)].map((_, i) => (
-            <div 
-              key={i} 
-              className="particle absolute"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`
-              }}
-            />
-          ))}
-        </div>
-        
-        <div ref={aboutContainerRef} className="container mx-auto px-4 md:px-12 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div ref={aboutTextRef} className="space-y-8">
-              {/* GSAP Animated Heading */}
-              <h2 
-                ref={aboutHeadingRef}
-                className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-300 leading-tight font-montserrat"
+              {/* GSAP Holographic Image Container */}
+              {/* <div 
+                ref={aboutImageRef} 
+                className="relative h-[450px] rounded-xl overflow-hidden border-2 border-white/10 shadow-2xl"
                 style={{ perspective: '1000px' }}
               >
-                About Micro Products
-              </h2>
-              
-              {/* GSAP Typewriter Effect */}
-              <p 
-                ref={aboutParagraph1Ref}
-                className="text-lg md:text-xl leading-relaxed text-gray-200 max-w-full break-words font-montserrat"
-              >
-                An emergency push button is a critical safety device designed for immediate response in hazardous situations.
-              </p>
-              
-              {/* GSAP Wave Effect */}
-              <p 
-                ref={aboutParagraph2Ref}
-                className="text-lg md:text-xl leading-relaxed text-gray-300 max-w-full break-words font-montserrat"
-              >
-                Common in industrial plants, elevators, and public facilities, it enhances workplace safety by providing a quick shutdown mechanism during emergencies. Some models include key reset or break-glass options for authorized use. Compliant with safety standards (ISO 13850, IEC 60947), emergency push buttons are vital for accident prevention and safeguarding lives.
-              </p>
-              
-              <div className="pt-2">
-                {/* GSAP Animated Button */}
-                <button 
-                  ref={aboutButtonRef}
-                  className="btn-morph bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold py-3 px-8 rounded-full hover:shadow-lg hover:shadow-blue-500/30 font-montserrat"
-                >
-                  <span className="relative z-10">Learn More</span>
-                </button>
-              </div>
-            </div>
-
-            {/* GSAP Holographic Image Container */}
-            <div 
-              ref={aboutImageRef} 
-              className="relative h-[450px] rounded-xl overflow-hidden border-2 border-white/10 shadow-2xl"
-              style={{ perspective: '1000px' }}
-            >
-              <Image 
-                src="https://static.grainger.com/rp/s/is/image/Grainger/22KT55_AS01" 
-                alt="Emergency Push Button" 
-                fill 
-                className="object-cover object-center transition-transform duration-300 hover:scale-105"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                priority
-              />
-              <div className="holographic-overlay absolute inset-0"></div>
-              <div className="scan-line absolute w-full h-1 bg-cyan-400 -top-0.5"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20 pointer-events-none"></div>
+                <Image 
+                  src="https://static.grainger.com/rp/s/is/image/Grainger/22KT55_AS01" 
+                  alt="Emergency Push Button" 
+                  fill 
+                  className="object-cover object-center transition-transform duration-300 hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
+                <div className="holographic-overlay absolute inset-0"></div>
+                <div className="scan-line absolute w-full h-1 bg-cyan-400 -top-0.5"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20 pointer-events-none"></div>
+              </div> */}
             </div>
           </div>
         </div>
