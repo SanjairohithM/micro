@@ -130,7 +130,7 @@ export default function Home() {
         <div id="smooth-content">
           <Navbar />
           <Hero />
-          <About />
+          {/* <About /> */}
            <div style={{ position: 'relative', zIndex: 10 }}>
       <Services />
     </div>
