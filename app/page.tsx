@@ -23,10 +23,10 @@ if (typeof window !== 'undefined') {
 export default function Home() {
   // State management - keep state minimal to reduce re-renders
   const [appState, setAppState] = useState({
-    isLoading: true,
-    tunnelComplete: false,
-    showFlash: false,
-    contentVisible: false
+    isLoading: false,
+    tunnelComplete: true,
+    showFlash: true,
+    contentVisible: true
   })
   
   // Refs for DOM elements and animations

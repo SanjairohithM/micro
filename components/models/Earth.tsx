@@ -1,49 +1,61 @@
-import React, { useEffect, useRef } from 'react';
-import { useGLTF, useAnimations } from '@react-three/drei';
+"use client"
+
+import React, { useRef } from 'react';
+import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { Group } from 'three';
+import { Group, Mesh } from 'three';
 
 type EarthProps = React.ComponentProps<'group'>;
 
 export default function Earth(props: EarthProps) {
-  const groupRef = useRef<Group>(null);
-  
-  // Always call useGLTF - don't wrap in try-catch to avoid hooks ordering issues
-  const gltf = useGLTF('/models/earth.glb');
-  const { actions, names } = useAnimations(gltf.animations, gltf.scene);
+  const group = useRef<Group>(null);
+  const { nodes, materials } = useGLTF('/models/earth.glb');
 
+  // Add slow rotation animation
   useFrame((state, delta) => {
-    if (groupRef.current) {
-      // Realistic Earth rotation (slower than push button)
-      groupRef.current.rotation.y += delta * 0.05;
+    if (group.current) {
+      // Very slow Earth rotation
+      group.current.rotation.y += delta * 0.1;
       
-      // Subtle floating animation
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.1;
+      // Optional: Add subtle floating animation
+      group.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.1;
       
-      // Optional: slight tilt like real Earth (23.5 degrees)
-      groupRef.current.rotation.z = Math.PI * 0.13; // roughly 23.5 degrees
+      // Optional: Earth tilt (23.5 degrees)
+      group.current.rotation.z = Math.PI * 0.13;
       
-      // Base scale with very subtle breathing effect
+      // Optional: Very subtle breathing effect
       const baseScale = 1.0;
       const breathe = baseScale + Math.sin(state.clock.elapsedTime * 1.2) * 0.02;
-      groupRef.current.scale.set(breathe, breathe, breathe);
+      group.current.scale.set(breathe, breathe, breathe);
     }
   });
 
-  useEffect(() => {
-    if (actions && names.length > 0) {
-      actions[names[0]]?.reset().play();
-    }
-  }, [actions, names]);
-
-  // Handle potential loading errors at render time, not during hook calls
-  if (!gltf || !gltf.scene) {
-    console.error('Error loading Earth GLTF: scene not available');
-    return null;
-  }
-
-  console.log('Earth GLTF loaded successfully:', gltf);
-  return <primitive object={gltf.scene} ref={groupRef} {...props} />;
+  return (
+    <group ref={group} {...props} dispose={null}>
+      <group name="Sketchfab_Scene">
+        <group name="RootNode">
+          <group name="Earth" rotation={[-Math.PI / 5, 0, 0]}>
+            <mesh
+              name="Earth_Material_#50_0"
+              castShadow
+              receiveShadow
+              geometry={(nodes['Earth_Material_#50_0'] as Mesh).geometry}
+              material={materials.Material_50}
+            />
+          </group>
+          <group name="EarthClouds" rotation={[-Math.PI / 2, -Math.PI / 9, 0]} scale={1.01}>
+            <mesh
+              name="EarthClouds_Material_#62_0"
+              castShadow
+              receiveShadow
+              geometry={(nodes['EarthClouds_Material_#62_0'] as Mesh).geometry}
+              material={materials.Material_62}
+            />
+          </group>
+        </group>
+      </group>
+    </group>
+  );
 }
 
-useGLTF.preload('/models/earth.glb'); 
+useGLTF.preload('/models/earth.glb');
