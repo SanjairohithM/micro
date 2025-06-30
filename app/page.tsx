@@ -131,9 +131,9 @@ export default function Home() {
           <Navbar />
           <Hero />
           {/* <About /> */}
-           <div style={{ position: 'relative', zIndex: 10 }}>
+           {/* <div style={{ position: 'relative', zIndex: 10 }}>
       <Services />
-    </div>
+    </div> */}
           <Contact />
           <TestmonialComponent/>
         </div>
