@@ -396,9 +396,9 @@ export default function Hero() {
 
       // Stage 2: Move to services section - more to the right
       buttonTimeline.to(pushButtonRef.current, {
-        x: "-5vw", // Much more to the right near "View All Products" text
-        y: "260vh", // Position at the bottom of services section near "View All Products"
-        scale: 0.3, // Much smaller scale for services section
+        x: "2vw", // Much more to the right near "View All Products" text
+        y: "235vh", // Position at the bottom of services section near "View All Products"
+        scale: 0.45, // Increased scale for more prominent appearance in services section
         rotation: 0,
         duration: 0.8, // Slower transition
         ease: "power1.inOut" // Smoother easing
